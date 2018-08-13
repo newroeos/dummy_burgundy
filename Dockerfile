@@ -9,7 +9,6 @@ RUN update-ca-certificates
 RUN go get -u github.com/golang/dep/cmd/dep
 
 ARG BUILD_PKG
-ARG BUILD_PORT
 
 # Copy the code from the host and compile it
 WORKDIR $GOPATH/src/$BUILD_PKG
@@ -18,6 +17,8 @@ RUN make vendor
 RUN CGO_ENABLED=0 GOOS=linux go build -i -tags 'release' -a -installsuffix nocgo -o /$BUILD_PKG .
 
 FROM alpine
+ARG BUILD_PKG
+ARG BUILD_PORT
 COPY --from=builder /$BUILD_PKG ./
 ENV PORT $BUILD_PORT
 EXPOSE $BUILD_PORT
