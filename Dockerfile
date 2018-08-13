@@ -14,6 +14,7 @@ ARG BUILD_PORT
 # Copy the code from the host and compile it
 WORKDIR $GOPATH/src/$BUILD_PKG
 COPY . ./
+RUN dep ensure -update
 RUN CGO_ENABLED=0 GOOS=linux go build -i -tags 'release' -a -installsuffix nocgo -o /$BUILD_PKG .
 
 FROM alpine
